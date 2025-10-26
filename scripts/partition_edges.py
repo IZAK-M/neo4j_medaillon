@@ -41,6 +41,10 @@ edges_df = edges_df.copy()
 # Attribution aléatoire d'un shard à chaque edge
 edges_df["shard"] = np.random.randint(0, NUM_SHARDS, size=len(edges_df))
 
+# Écritures des nodes
+SILVER_DIR.mkdir(parents=True, exist_ok=True)
+nodes_df.to_parquet(SILVER_DIR / "nodes.parquet", compression="snappy")
+
 # Partitionnement et écriture
 for shard_id in range(NUM_SHARDS):
     shard_dir = SILVER_DIR / f"shard={shard_id}"
@@ -49,8 +53,5 @@ for shard_id in range(NUM_SHARDS):
     # Écriture des edges
     shard_edges = edges_df[edges_df["shard"] == shard_id].drop(columns=["shard"])
     shard_edges.to_parquet(shard_dir / "edges.parquet", compression="snappy")
-
-    # Écritures des nodes
-    nodes_df.to_parquet(shard_dir / "nodes.parquet", compression="snappy")
 
     print(f"✅ Shard {shard_id} → {len(shard_edges)} edges")
