@@ -1,4 +1,4 @@
-# Projet : noe4j_medaillon
+# Projet : neo4j_medaillon
 
 ## 🧩 Description
 
